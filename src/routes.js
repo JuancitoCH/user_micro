@@ -8,7 +8,6 @@ function user_router(app){
     // Instance of user Service
     const userService = new User()
 
-    //TODO: hacer que no devuelva las contraseñas
     router.get('/',async (req,res)=>{
         const response = await userService.getAllUsers()
         response.success
@@ -18,6 +17,20 @@ function user_router(app){
             true,
             "Users successfully retrieved",
             response.users
+          )
+        : errorResponse(res, response.error);
+    })
+
+    router.get('/one/:email',async (req,res)=>{
+        const {email} = req.params
+        const response = await userService.getUserbyEmail(email)
+        response.success
+        ? successfulResponse(
+            res,
+            200,
+            true,
+            "Users successfully retrieved",
+            response.user
           )
         : errorResponse(res, response.error);
     })
